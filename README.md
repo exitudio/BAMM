@@ -1,4 +1,5 @@
-# [BAMM: Bidirectional Autoregressive Motion Model) (ECCV 2024)
+# [BAMM: Bidirectional Autoregressive Motion Model](https://exitudio.github.io/BAMM-page/)  (ECCV 2024)
+
 [![arXiv](https://img.shields.io/badge/arXiv-<2403.19435>-<COLOR>.svg)](https://arxiv.org/abs/2403.19435)
 
 The official PyTorch implementation of the paper [**"BAMM: Bidirectional Autoregressive Motion Model"**](https://arxiv.org/abs/2403.19435).
