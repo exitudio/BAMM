@@ -1,0 +1,13 @@
+*.pyc
+checkpoints
+editing
+generation
+
+
+# dataset
+body_models
+glove
+__pycache__
+log
+dataset/HumanML3D
+dataset/KIT-ML
