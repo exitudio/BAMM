@@ -22,7 +22,7 @@ def load_vq_model(vq_opt):
                 dim_pose,
                 vq_opt.nb_code,
                 vq_opt.code_dim,
-                vq_opt.code_dim,
+                vq_opt.output_emb_width,
                 vq_opt.down_t,
                 vq_opt.stride_t,
                 vq_opt.width,
@@ -60,15 +60,6 @@ def load_trans_model(model_opt, which_model):
     return t2m_transformer
 
 def load_res_model(res_opt):
-    class ResTrans(torch.nn.Module):
-        def __init__(self):
-            super().__init__()
-
-        def generate(self, *args, **kwargs):
-            import pdb; pdb.set_trace()
-            return args[-1]
-    return ResTrans()
-
     res_opt.num_quantizers = vq_opt.num_quantizers
     res_opt.num_tokens = vq_opt.nb_code
     res_transformer = ResidualTransformer(code_dim=vq_opt.code_dim,
@@ -131,7 +122,7 @@ if __name__ == '__main__':
     res_opt = get_opt(res_opt_path, device=opt.device)
     res_model = load_res_model(res_opt)
 
-    # assert res_opt.vq_name == model_opt.vq_name
+    assert res_opt.vq_name == model_opt.vq_name
 
     dataset_opt_path = 'checkpoints/kit/Comp_v6_KLD005/opt.txt' if opt.dataset_name == 'kit' \
         else 'checkpoints/t2m/Comp_v6_KLD005/opt.txt'

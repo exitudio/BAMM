@@ -944,7 +944,7 @@ def evaluation_mask_transformer_test_plus_res(val_loader, vq_model, res_model, t
         num_mm_batch = 0
     else:
         num_mm_batch = 3
-    is_res = False
+    is_res = True
     gt_len = False
     len_estimator = None #'hml3d_estimator'
 

@@ -40,7 +40,7 @@ def load_vq_model():
                 dim_pose,
                 vq_opt.nb_code,
                 vq_opt.code_dim,
-                vq_opt.code_dim,
+                vq_opt.output_emb_width,
                 vq_opt.down_t,
                 vq_opt.stride_t,
                 vq_opt.width,
@@ -48,7 +48,7 @@ def load_vq_model():
                 vq_opt.dilation_growth_rate,
                 vq_opt.vq_act,
                 vq_opt.vq_norm)
-    ckpt = torch.load(pjoin(vq_opt.checkpoints_dir, vq_opt.dataset_name, vq_opt.name, 'model', 'latest.tar'),
+    ckpt = torch.load(pjoin(vq_opt.checkpoints_dir, vq_opt.dataset_name, vq_opt.name, 'model', 'net_best_fid.tar'),
                             map_location='cpu')
     model_key = 'vq_model' if 'vq_model' in ckpt else 'net'
     vq_model.load_state_dict(ckpt[model_key])

@@ -17,7 +17,7 @@ class EvalT2MOptions(BaseOptions):
                                  help="Sampling Temperature.")
         self.parser.add_argument("--topkr", default=0.9, type=float,
                                  help="Filter out percentil low prop entries.")
-        self.parser.add_argument("--time_steps", default=18, type=int,
+        self.parser.add_argument("--time_steps", default=10, type=int,
                                  help="Mask Generate steps.")
         self.parser.add_argument("--seed", default=10107, type=int)
 

@@ -1,4 +1,4 @@
-name: momask
+name: BAMM
 channels:
   - pytorch
   - anaconda
