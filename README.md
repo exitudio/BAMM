@@ -16,14 +16,14 @@ If our project is helpful for your research, please consider citing :
   year={2024},
 }
 ```
-## 📍 Get You Ready
-Our model is devloped based on [MoMask](https://github.com/EricGuo5513/momask-codes). You can follow the setup instructions provided there, or refer to the steps below.
+## 1. Setup Env & Download Pre-train MoMask
+Our model is devloped based on [MoMask](https://github.com/EricGuo5513/momask-codes). You can follow the setup instructions provided there, or refer to the steps below. (The environment setup is the same but we change conda env name to "BAMM")
 <details>
   
 ### 1. Conda Environment
 ```
 conda env create -f environment.yml
-conda activate momask
+conda activate BAMM
 pip install git+https://github.com/openai/CLIP.git
 ```
 We test our code on Python 3.7.13 and PyTorch 1.7.1
@@ -77,9 +77,16 @@ cp -r ../HumanML3D/HumanML3D ./dataset/HumanML3D
 
 </details>
 
+## 2. Download Pre-train BAMM and Move MoMask to "log" folder
+```
+bash prepare/download_models_BAMM.sh
+```
 
 ## 📖 Evaluation
 <details>
+
+
+
 ```
 python eval_t2m_trans_res.py \
     --res_name tres_nlayer8_ld384_ff1024_rvq6ns_cdp0.2_sw \
