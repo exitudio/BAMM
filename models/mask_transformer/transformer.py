@@ -399,30 +399,24 @@ class MaskTransformer(nn.Module):
                  temperature=1,
                  topk_filter_thres=0.9,
                  gsample=False,
-                 force_mask=False
+                 force_mask=False,
+                 is_predict_len=True
                  ):
-        # print(self.opt.num_quantizers)
-        # assert len(timesteps) >= len(cond_scales) == self.opt.num_quantizers
         with torch.no_grad():
             cond_vector = self.encode_text(conds)
         is_softmax = True
         seq_len = 49 #max(m_lens)
+        
 
-
-        # padding_mask = ~lengths_to_mask(m_lens, seq_len+1)
-        # ids = torch.ones_like(padding_mask) * self.pad_id
-        # ids = ids.scatter(-1, m_lens[..., None], self.end_id)
-        # scores = torch.where(padding_mask, 1e5, 0.)
         ids = torch.ones((len(conds), seq_len+1), dtype=torch.long, device=m_lens.device) * self.pad_id
         ids, scores = self.gen_one(ids, cond_vector, seq_len, cond_idx=None, cond_scale=cond_scale)
-        ids, pred_len = self.pad_after_end(ids)
+        if is_predict_len:
+            ids, pred_len = self.pad_after_end(ids)
+        else:
+            pred_len = m_lens
         padding_mask = ~lengths_to_mask(pred_len, seq_len+1)
         ids = ids.scatter(-1, pred_len[..., None], self.end_id)
-        # scores = torch.where(padding_mask, 1e5, 0.)
-        
-        # num_token_masked = torch.round(.5 * pred_len).clamp(min=1)
-        # sorted_indices = scores.argsort( dim=1)
-        # ranks = sorted_indices.argsort(dim=1)  # (b, k), rank[i, j] = the rank (0: lowest) of scores[i, j] on dim=1
+
         is_mask = torch.ones_like(ids, dtype=torch.bool)
         is_mask[:, 1::2] = False
 
@@ -434,7 +428,7 @@ class MaskTransformer(nn.Module):
 
         # scores = torch.cat([scores, torch.ones(scores.shape[0], 1, device=ids.device)*1e5], dim=1)
         # scores = scores.masked_fill(~is_mask, 1e5)
-        return ids
+        return ids, pred_len
     
     def gen_one(self, idx, cond_vector, seq_len, cond_idx, cond_scale, pred_len=True):
         probs_all = []

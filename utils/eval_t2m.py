@@ -1031,7 +1031,7 @@ def evaluation_mask_transformer_test_plus_res(val_loader, vq_model, res_model, t
                 if edit_task is not None:
                     mids = trans.edit2(clip_text, tokens, force_mask=force_mask)
                 else:
-                    mids = trans.generate(clip_text, input_len // 4, time_steps, cond_scale,
+                    mids, _ = trans.generate(clip_text, input_len // 4, time_steps, cond_scale,
                                         temperature=temperature, topk_filter_thres=topkr,
                                         gsample=gsample)
                 # q = mids == trans.end_id
@@ -1068,7 +1068,7 @@ def evaluation_mask_transformer_test_plus_res(val_loader, vq_model, res_model, t
             if edit_task is not None:
                     mids = trans.edit2(clip_text, tokens, force_mask=force_mask)
             else:
-                mids = trans.generate(clip_text, input_len // 4, time_steps, cond_scale,
+                mids, _ = trans.generate(clip_text, input_len // 4, time_steps, cond_scale,
                                     temperature=temperature, topk_filter_thres=topkr)
             # q = mids == trans.end_id
             # mids[q] = 0

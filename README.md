@@ -82,7 +82,25 @@ cp -r ../HumanML3D/HumanML3D ./dataset/HumanML3D
 bash prepare/download_models_BAMM.sh
 ```
 
-## 📖 Evaluation
+## 3. Generate
+
+```
+python gen_t2m.py \
+    --res_name tres_nlayer8_ld384_ff1024_rvq6ns_cdp0.2_sw \
+    --name 2024-02-14-14-27-29_8_GPT_officialTrans_2iterPrdictEnd \
+    --text_prompt "the person crouches and walks forward." \
+    --motion_length -1 \
+    --repeat_times 1 \
+    --gpu_id 1 \
+    --ext generation_name_nopredlen
+```
+- --text_prompt: text
+- --motion_length: -1 the model will automatically predict length otherwise it will use the input as a length
+- --ext: generation name
+It will generate to "generation" directory.
+
+
+## 4. Evaluation
 <details>
 
 

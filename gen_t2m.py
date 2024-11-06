@@ -66,7 +66,7 @@ def load_trans_model(model_opt, opt, which_model):
     print(f'Loading Transformer {opt.name} from epoch {ckpt["ep"]}!')
     return t2m_transformer
 
-def load_res_model(res_opt, vq_opt, opt):
+def load_res_model(res_opt):
     res_opt.num_quantizers = vq_opt.num_quantizers
     res_opt.num_tokens = vq_opt.nb_code
     res_transformer = ResidualTransformer(code_dim=vq_opt.code_dim,
@@ -94,7 +94,7 @@ def load_res_model(res_opt, vq_opt, opt):
 
 def load_len_estimator(opt):
     model = LengthEstimator(512, 50)
-    ckpt = torch.load(pjoin(opt.checkpoints_dir, opt.dataset_name, 'length_estimator', 'model', 'finest.tar'),
+    ckpt = torch.load(pjoin('checkpoints', opt.dataset_name, 'length_estimator', 'model', 'finest.tar'),
                       map_location=opt.device)
     model.load_state_dict(ckpt['estimator'])
     print(f'Loading Length Estimator from epoch {ckpt["epoch"]}!')
@@ -103,7 +103,7 @@ def load_len_estimator(opt):
 
 if __name__ == '__main__':
     parser = EvalT2MOptions()
-    opt = parser.parse()
+    opt = parser.parse(is_eval=True)
     fixseed(opt.seed)
 
     opt.device = torch.device("cpu" if opt.gpu_id == -1 else "cuda:" + str(opt.gpu_id))
@@ -127,9 +127,8 @@ if __name__ == '__main__':
     #######################
     ######Loading RVQ######
     #######################
-    vq_opt_path = pjoin(opt.checkpoints_dir, opt.dataset_name, model_opt.vq_name, 'opt.txt')
+    vq_opt_path = pjoin('./log/vq', opt.dataset_name, model_opt.vq_name, 'opt.txt')
     vq_opt = get_opt(vq_opt_path, device=opt.device)
-    vq_opt.dim_pose = dim_pose
     vq_model, vq_opt = load_vq_model(vq_opt)
 
     model_opt.num_tokens = vq_opt.nb_code
@@ -139,9 +138,9 @@ if __name__ == '__main__':
     #################################
     ######Loading R-Transformer######
     #################################
-    res_opt_path = pjoin(opt.checkpoints_dir, opt.dataset_name, opt.res_name, 'opt.txt')
+    res_opt_path = pjoin('checkpoints', opt.dataset_name, opt.res_name, 'opt.txt')
     res_opt = get_opt(res_opt_path, device=opt.device)
-    res_model = load_res_model(res_opt, vq_opt, opt)
+    res_model = load_res_model(res_opt)
 
     assert res_opt.vq_name == model_opt.vq_name
 
@@ -168,8 +167,8 @@ if __name__ == '__main__':
     ##### ---- Dataloader ---- #####
     opt.nb_joints = 21 if opt.dataset_name == 'kit' else 22
 
-    mean = np.load(pjoin(opt.checkpoints_dir, opt.dataset_name, model_opt.vq_name, 'meta', 'mean.npy'))
-    std = np.load(pjoin(opt.checkpoints_dir, opt.dataset_name, model_opt.vq_name, 'meta', 'std.npy'))
+    mean = np.load(pjoin('checkpoints', opt.dataset_name, model_opt.vq_name, 'meta', 'mean.npy'))
+    std = np.load(pjoin('checkpoints', opt.dataset_name, model_opt.vq_name, 'meta', 'std.npy'))
     def inv_transform(data):
         return data * std + mean
 
@@ -219,12 +218,14 @@ if __name__ == '__main__':
     for r in range(opt.repeat_times):
         print("-->Repeat %d"%r)
         with torch.no_grad():
-            mids = t2m_transformer.generate(captions, token_lens,
+            mids, pred_len = t2m_transformer.generate(captions, token_lens,
                                             timesteps=opt.time_steps,
                                             cond_scale=opt.cond_scale,
                                             temperature=opt.temperature,
                                             topk_filter_thres=opt.topkr,
-                                            gsample=opt.gumbel_sample)
+                                            gsample=opt.gumbel_sample,
+                                            is_predict_len=opt.motion_length==-1)
+            m_length = pred_len*4
             # print(mids)
             # print(mids.shape)
             mids = res_model.generate(mids, captions, token_lens, temperature=1, cond_scale=5)
