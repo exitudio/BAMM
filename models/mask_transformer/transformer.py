@@ -417,8 +417,17 @@ class MaskTransformer(nn.Module):
         padding_mask = ~lengths_to_mask(pred_len, seq_len+1)
         ids = ids.scatter(-1, pred_len[..., None], self.end_id)
 
-        is_mask = torch.ones_like(ids, dtype=torch.bool)
-        is_mask[:, 1::2] = False
+        MASK_STATIC = False
+        if MASK_STATIC:
+            is_mask = torch.ones_like(ids, dtype=torch.bool)
+            is_mask[:, 1::2] = False
+        else:
+            scores = torch.where(padding_mask, 1e5, 0.)
+            
+            num_token_masked = torch.round(.5 * pred_len).clamp(min=1)
+            sorted_indices = scores.argsort( dim=1)
+            ranks = sorted_indices.argsort(dim=1)  # (b, k), rank[i, j] = the rank (0: lowest) of scores[i, j] on dim=1
+            is_mask = (ranks < num_token_masked.unsqueeze(-1))
 
         cons_pos = ((~is_mask * ~padding_mask) + (ids==self.end_id)) > 0
         cond_idx = torch.where(cons_pos, ids, self.pad_id).clone()

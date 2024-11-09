@@ -19,7 +19,7 @@ class EvalT2MOptions(BaseOptions):
                                  help="Filter out percentil low prop entries.")
         self.parser.add_argument("--time_steps", default=10, type=int,
                                  help="Mask Generate steps.")
-        self.parser.add_argument("--seed", default=10107, type=int)
+        self.parser.add_argument("--seed", default=1, type=int)
 
         self.parser.add_argument('--gumbel_sample', action="store_true", help='True: gumbel sampling, False: categorical sampling.')
         self.parser.add_argument('--use_res_model', action="store_true", help='Whether to use residual transformer.')

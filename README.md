@@ -90,12 +90,16 @@ python gen_t2m.py \
     --name 2024-02-14-14-27-29_8_GPT_officialTrans_2iterPrdictEnd \
     --text_prompt "the person crouches and walks forward." \
     --motion_length -1 \
-    --repeat_times 1 \
-    --gpu_id 1 \
+    --repeat_times 3 \
+    --gpu_id 0 \
+    --seed 1 \
     --ext generation_name_nopredlen
 ```
 - --text_prompt: text
 - --motion_length: -1 the model will automatically predict length otherwise it will use the input as a length
+- --seed: Sets the random seed for generation, enabling reproducibility of results across different runs. With a fixed seed, you will get the same generation in each run, making results consistent.
+**Note:**
+If you'd like to see variation in the generation results, see the generation from other "repeat_times" or change the seed value.
 - --ext: generation name
 It will generate to "generation" directory.
 

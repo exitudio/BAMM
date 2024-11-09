@@ -12,9 +12,10 @@ python gen_t2m.py \
     --name 2024-02-14-14-27-29_8_GPT_officialTrans_2iterPrdictEnd \
     --text_prompt "the person crouches and walks forward." \
     --motion_length -1 \
-    --repeat_times 2 \
-    --gpu_id 1 \
-    --ext generation_name_nopredlen
+    --repeat_times 3 \
+    --gpu_id 0 \
+    --seed 1 \
+    --ext seed1
 
 
 sleep 500

@@ -225,7 +225,8 @@ if __name__ == '__main__':
                                             topk_filter_thres=opt.topkr,
                                             gsample=opt.gumbel_sample,
                                             is_predict_len=opt.motion_length==-1)
-            m_length = pred_len*4
+            token_lens = pred_len
+            m_length = token_lens*4
             # print(mids)
             # print(mids.shape)
             mids = res_model.generate(mids, captions, token_lens, temperature=1, cond_scale=5)
