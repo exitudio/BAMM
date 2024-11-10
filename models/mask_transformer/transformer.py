@@ -409,7 +409,7 @@ class MaskTransformer(nn.Module):
         
 
         ids = torch.ones((len(conds), seq_len+1), dtype=torch.long, device=m_lens.device) * self.pad_id
-        ids, scores = self.gen_one(ids, cond_vector, seq_len, cond_idx=None, cond_scale=cond_scale)
+        ids, scores = self.gen_one(ids, cond_vector, seq_len, cond_idx=None, cond_scale=cond_scale, pred_len=is_predict_len)
         if is_predict_len:
             ids, pred_len = self.pad_after_end(ids)
         else:

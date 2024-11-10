@@ -11,7 +11,7 @@ python gen_t2m.py \
     --res_name tres_nlayer8_ld384_ff1024_rvq6ns_cdp0.2_sw \
     --name 2024-02-14-14-27-29_8_GPT_officialTrans_2iterPrdictEnd \
     --text_prompt "the person crouches and walks forward." \
-    --motion_length -1 \
+    --motion_length 196 \
     --repeat_times 3 \
     --gpu_id 0 \
     --seed 1 \
