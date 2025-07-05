@@ -16,6 +16,13 @@ If our project is helpful for your research, please consider citing :
   year={2024},
 }
 ```
+
+## Update
+
+📢 June/25/25 - Our new paper ([MaskControl (ControlMM)](https://www.ekkasit.com/ControlMM-page/)) is accepted at ICCV 2025  <br>
+📢 June/22/25 - Released code for adding control to MMM ([MaskControl (ControlMM)](https://www.ekkasit.com/ControlMM-page/))<br>
+
+
 ## 1. Setup Env & Download Pre-train MoMask
 Our model is devloped based on [MoMask](https://github.com/EricGuo5513/momask-codes). You can follow the setup instructions provided there, or refer to the steps below. (The environment setup is the same but we change conda env name to "BAMM")
 <details>
